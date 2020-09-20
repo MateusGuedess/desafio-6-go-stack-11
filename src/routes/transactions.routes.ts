@@ -27,7 +27,6 @@ transactionsRouter.post('/', async (request, response) => {
   const { title, value, type, category } = request.body;
 
   const createTransactionService = new CreateTransactionService();
-  console.log(category);
   const transaction = await createTransactionService.execute({
     title,
     value,
@@ -49,14 +48,13 @@ transactionsRouter.delete('/:id', async (request, response) => {
 
 transactionsRouter.post(
   '/import',
-  upload.single('csv'),
+  upload.single('file'),
   async (request, response) => {
     // TODO
-    const { path } = request.file;
 
     const importTransactions = new ImportTransactionsService();
 
-    const transactions = await importTransactions.execute({ path });
+    const transactions = await importTransactions.execute(request.file.path);
 
     return response.json(transactions);
   },
